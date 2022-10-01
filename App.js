@@ -78,7 +78,10 @@ export default function App() {
 
   let toggleCameraType = () => {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+  }
 
+  let playSound = () => {
+    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
 
   if (video) {
@@ -110,16 +113,21 @@ export default function App() {
     );
   }
   return (
+    <View  style={styles.screen}>
     <Camera style={styles.container} ref={cameraRef} ratio='16:9' type={type}>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#00B53A"} ,styles.cameraButton]} onPress={isRecording ? stopRecording : recordVideo}>
+          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.speakerButton]} onPress={playSound}>
+          <Image source={require('./assets/speaker.png')} resizeMethod='resize' resizeMode='contain' style={styles.speakerImage}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.cameraButton]} onPress={isRecording ? stopRecording : recordVideo}>
           <Image source={require('./assets/camera.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraImage}/>
           </TouchableOpacity>
-          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#00B53A"} ,styles.cameraFlipButton]} onPress={toggleCameraType}>
+          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.cameraFlipButton]} onPress={toggleCameraType}>
           <Image source={require('./assets/cameraFlip.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraFlipImage}/>
           </TouchableOpacity>
       </View>
     </Camera>
+    </View>
   );
 }
 
@@ -129,24 +137,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height:'50%',
+    height: 'auto',
   },
   cameraButton:{
-    marginLeft: '30%',
-    borderRadius: 10,
+    marginLeft: '10%',
+    borderRadius: 30,
     overflow: 'hidden',
   },
   cameraFlipButton:{
     marginLeft: '10%',
-    borderRadius: 10,
+    borderRadius: 30,
+    overflow: 'hidden',
+  },
+  speakerButton:{
+    marginLeft: '5%',
+    borderRadius: 30,
     overflow: 'hidden',
   },
   buttonContainer: {
     flexDirection: 'row',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    backgroundColor: '#1F1F1F',
+    height: '20%',
+    alignItems: 'center',
     marginTop: '170%',
     width: '100%',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  screen: {
+    flex: 1,
   },
   cameraImage: {
     width: 100,
@@ -154,6 +173,11 @@ const styles = StyleSheet.create({
     margin: 10, 
   },
   cameraFlipImage: {
+    width: 50,
+    height: 50,
+    margin: 10, 
+  },
+  speakerImage: {
     width: 50,
     height: 50,
     margin: 10, 
