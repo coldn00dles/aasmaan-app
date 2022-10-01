@@ -22,6 +22,7 @@ export default function App() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [type, setType] = useState("back");
   const [sound, setSound] = useState();
+  const [city,setCity] = useState();
 
   useEffect(() => {
     (async () => {
@@ -32,7 +33,16 @@ export default function App() {
       }
 
       let location = await Location.getCurrentPositionAsync({});
+      const geocode = await Location.reverseGeocodeAsync({
+        latitude : location.coords.latitude,
+        longitude : location.coords.longitude
+    });
       setLocation(location);
+      let city;
+        geocode.find( p => {
+          city = p.city
+          setCity(p.city)
+        });
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
       const microphonePermission = await Camera.requestMicrophonePermissionsAsync();
       const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
@@ -88,7 +98,7 @@ export default function App() {
 
   if (video) {
     let shareVideo = () => {
-      console.log(text);
+      console.log(city);
       shareAsync(video.uri).then(() => {
         setVideo(undefined);
       });
