@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, Image } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
 import { Camera } from 'expo-camera';
 import { Video } from 'expo-av';
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
+import { TouchableOpacity } from 'react-native';
 
 export default function App() {
   let cameraRef = useRef();
@@ -82,8 +83,9 @@ export default function App() {
   return (
     <Camera style={styles.container} ref={cameraRef}>
       <View style={styles.buttonContainer}>
-        <Button title={isRecording ? "Stop Recording" : "Record Video"} onPress={isRecording ? stopRecording : recordVideo} 
-        color = {isRecording ? "#FF0000" : "#00B53A"}/>
+        <TouchableOpacity style={{ backgroundColor: isRecording ? "#DA1E05" : "#00B53A" , borderRadius: 10, overflow: 'hidden'}} onPress={isRecording ? stopRecording : recordVideo}>
+          <Image source={require('./assets/camera.png')} resizeMethod='resize' resizeMode='contain' style={styles.tinyLogo}/>
+          </TouchableOpacity>
       </View>
     </Camera>
   );
@@ -98,6 +100,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: "#fff",
     alignSelf: "flex-end"
+  },
+  tinyLogo: {
+    width:50,
+    height: 50,
+    margin: 10, 
   },
   video: {
     flex: 1,
