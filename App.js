@@ -7,6 +7,8 @@ import * as MediaLibrary from 'expo-media-library';
 import { TouchableOpacity } from 'react-native';
 import * as Location from 'expo-location';
 
+
+
 export default function App() {
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();
@@ -21,7 +23,6 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -30,17 +31,6 @@ export default function App() {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-    })();
-  }, []);
-
-  let text = 'Waiting..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
-  useEffect(() => {
-    (async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
       const microphonePermission = await Camera.requestMicrophonePermissionsAsync();
       const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
@@ -50,7 +40,12 @@ export default function App() {
       setHasMediaLibraryPermission(mediaLibraryPermission.status === "granted");
     })();
   }, []);
-
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
   if (hasCameraPermission === undefined || hasMicrophonePermission === undefined) {
     return <Text>Requestion permissions...</Text>
   } else if (!hasCameraPermission) {
@@ -86,6 +81,7 @@ export default function App() {
 
   if (video) {
     let shareVideo = () => {
+      console.log(text);
       shareAsync(video.uri).then(() => {
         setVideo(undefined);
       });
