@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, SafeAreaView, Image } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
-import { AutoFocus, Camera } from 'expo-camera';
+import { AutoFocus, Camera, CameraType } from 'expo-camera';
 import { Video } from 'expo-av';
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
@@ -13,6 +13,8 @@ export default function App() {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [isRecording, setIsRecording] = useState(false);
   const [video, setVideo] = useState();
+  const [type, setType] = useState("back");
+  
 
   useEffect(() => {
     (async () => {
@@ -51,6 +53,11 @@ export default function App() {
     cameraRef.current.stopRecording();
   };
 
+  let toggleCameraType = () => {
+    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+
+  }
+
   if (video) {
     let shareVideo = () => {
       shareAsync(video.uri).then(() => {
@@ -79,12 +86,14 @@ export default function App() {
       </SafeAreaView>
     );
   }
-
   return (
-    <Camera style={styles.container} ref={cameraRef}>
+    <Camera style={styles.container} ref={cameraRef} ratio='16:9' type={type}>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={{ backgroundColor: isRecording ? "#DA1E05" : "#00B53A" , borderRadius: 10, overflow: 'hidden'}} onPress={isRecording ? stopRecording : recordVideo}>
-          <Image source={require('./assets/camera.png')} resizeMethod='resize' resizeMode='contain' style={styles.tinyLogo}/>
+        <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#00B53A"} ,styles.cameraButton]} onPress={isRecording ? stopRecording : recordVideo}>
+          <Image source={require('./assets/camera.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraImage}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#00B53A"} ,styles.cameraFlipButton]} onPress={toggleCameraType}>
+          <Image source={require('./assets/cameraFlip.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraFlipImage}/>
           </TouchableOpacity>
       </View>
     </Camera>
@@ -96,13 +105,33 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    height:'50%',
+  },
+  cameraButton:{
+    marginLeft: '30%',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  cameraFlipButton:{
+    marginLeft: '10%',
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   buttonContainer: {
-    alignSelf: "center",
+    flexDirection: 'row',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     marginTop: '170%',
+    width: '100%',
   },
-  tinyLogo: {
+  cameraImage: {
     width: 100,
+    height: 50,
+    margin: 10, 
+  },
+  cameraFlipImage: {
+    width: 50,
     height: 50,
     margin: 10, 
   },
