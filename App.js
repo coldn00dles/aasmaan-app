@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, SafeAreaView, Image } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
-import { Camera } from 'expo-camera';
+import { AutoFocus, Camera } from 'expo-camera';
 import { Video } from 'expo-av';
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
@@ -98,11 +98,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonContainer: {
-    backgroundColor: "#fff",
-    alignSelf: "flex-end"
+    alignSelf: "center",
+    marginTop: '170%',
   },
   tinyLogo: {
-    width:50,
+    width: 100,
     height: 50,
     margin: 10, 
   },
