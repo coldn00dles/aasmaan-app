@@ -107,7 +107,7 @@ export default function App() {
           source={{uri: video.uri}}
           useNativeControls
           resizeMode='contain'
-          isLooping
+          isLooping = 'false'
         />
         <Button title="Share" onPress={shareVideo} />
         {hasMediaLibraryPermission ? <Button title="Save" onPress={saveVideo} /> : undefined}
@@ -119,13 +119,13 @@ export default function App() {
     <View  style={styles.screen}>
     <Camera style={styles.container} ref={cameraRef} ratio='16:9' type={type}>
       <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.speakerButton]} onPress={() => {playSound()}}>
+          <TouchableOpacity style={[{ backgroundColor: '#00B53A'} ,styles.speakerButton]} onPress={() => {playSound()}}>
           <Image source={require('./assets/speaker.png')} resizeMethod='resize' resizeMode='contain' style={styles.speakerImage}/>
           </TouchableOpacity>
           <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.cameraButton]} onPress={isRecording ? stopRecording : recordVideo}>
           <Image source={require('./assets/camera.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraImage}/>
           </TouchableOpacity>
-          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.cameraFlipButton]} onPress={toggleCameraType}>
+          <TouchableOpacity style={[{ backgroundColor: "#207DC1"} ,styles.cameraFlipButton]} onPress={toggleCameraType}>
           <Image source={require('./assets/cameraFlip.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraFlipImage}/>
           </TouchableOpacity>
       </View>
