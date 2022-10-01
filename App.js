@@ -6,6 +6,7 @@ import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 import { TouchableOpacity } from 'react-native';
 import * as Location from 'expo-location';
+import { Audio } from 'expo-av';
 
 export default function App() {
   let cameraRef = useRef();
@@ -18,20 +19,7 @@ export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [type, setType] = useState("back");
-
-  useEffect(() => {
-    (async () => {
-      
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
-  }, []);
+  const [sound, setSound] = useState();
 
   let text = 'Waiting..';
   if (errorMsg) {
@@ -44,6 +32,8 @@ export default function App() {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
       const microphonePermission = await Camera.requestMicrophonePermissionsAsync();
       const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
+
+      playSound();
 
       setHasCameraPermission(cameraPermission.status === "granted");
       setHasMicrophonePermission(microphonePermission.status === "granted");
@@ -80,8 +70,11 @@ export default function App() {
     setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   }
 
-  let playSound = () => {
-    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
+  async function playSound(){
+    const { sound } = await Audio.Sound.createAsync( require('./assets/record.m4a')
+    );
+    setSound(sound);
+    await sound.playAsync();
   }
 
   if (video) {
@@ -116,7 +109,7 @@ export default function App() {
     <View  style={styles.screen}>
     <Camera style={styles.container} ref={cameraRef} ratio='16:9' type={type}>
       <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.speakerButton]} onPress={playSound}>
+          <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.speakerButton]} onPress={() => {playSound()}}>
           <Image source={require('./assets/speaker.png')} resizeMethod='resize' resizeMode='contain' style={styles.speakerImage}/>
           </TouchableOpacity>
           <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.cameraButton]} onPress={isRecording ? stopRecording : recordVideo}>
