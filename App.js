@@ -36,13 +36,13 @@ export default function App() {
       const geocode = await Location.reverseGeocodeAsync({
         latitude : location.coords.latitude,
         longitude : location.coords.longitude
-    });
+    })
       setLocation(location);
       let city;
         geocode.find( p => {
-          city = p.city
-          setCity(p.city)
-        });
+          city = p.district
+          setCity(p.district)
+        })
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
       const microphonePermission = await Camera.requestMicrophonePermissionsAsync();
       const mediaLibraryPermission = await MediaLibrary.requestPermissionsAsync();
@@ -96,6 +96,13 @@ export default function App() {
     await sound.playAsync();
   }
 
+  async function playSound2(){
+    const { sound } = await Audio.Sound.createAsync( require('./assets/record2.m4a')
+    );
+    setSound(sound);
+    await sound.playAsync();
+  }
+
   if (video) {
     let shareVideo = () => {
       console.log(city);
@@ -111,7 +118,8 @@ export default function App() {
     };
 
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.screen}>
+      {/* <SafeAreaView style={styles.container}> */}
         <Video
           style={styles.video}
           source={{uri: video.uri}}
@@ -119,10 +127,19 @@ export default function App() {
           resizeMode='contain'
           isLooping = 'false'
         />
-        <Button title="Share" onPress={shareVideo} />
-        {hasMediaLibraryPermission ? <Button title="Save" onPress={saveVideo} /> : undefined}
-        <Button title="Discard" onPress={() => setVideo(undefined)} />
-      </SafeAreaView>
+        {/* </SafeAreaView> */}
+        <View style={styles.buttonContainer2}>
+          <TouchableOpacity style={[{ backgroundColor: '#00B53A'} ,styles.speakerButton]} onPress={() => {playSound2()}}>
+          <Image source={require('./assets/speaker.png')} resizeMethod='resize' resizeMode='contain' style={styles.speakerImage}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={[{ backgroundColor: "#207DC1"} ,styles.cameraButton]} onPress={shareVideo}>
+          <Image source={require('./assets/send.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraImage}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={[{ backgroundColor: '#DA1E05'} ,styles.cameraFlipButton]} onPress={() => setVideo(undefined)}>
+          <Image source={require('./assets/trash.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraFlipImage}/>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   }
   return (
@@ -135,9 +152,7 @@ export default function App() {
           <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.cameraButton]} onPress={isRecording ? stopRecording : recordVideo}>
           <Image source={require('./assets/camera.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraImage}/>
           </TouchableOpacity>
-          <TouchableOpacity style={[{ backgroundColor: "#207DC1"} ,styles.cameraFlipButton]} onPress={toggleCameraType}>
-          <Image source={require('./assets/cameraFlip.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraFlipImage}/>
-          </TouchableOpacity>
+          
       </View>
     </Camera>
     </View>
@@ -177,8 +192,15 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
   },
+  buttonContainer2: {
+    flexDirection: 'row',
+    backgroundColor: '#1F1F1F',
+    alignItems: 'center',
+    width: '100%',
+  },
   screen: {
     flex: 1,
+    height: '100%',
   },
   cameraImage: {
     width: 100,
