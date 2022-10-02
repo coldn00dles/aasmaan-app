@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, SafeAreaView, Image, TextInput } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
 import { AutoFocus, Camera, CameraType } from 'expo-camera';
 import { Video } from 'expo-av';
@@ -17,6 +17,7 @@ export default function App() {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [isRecording, setIsRecording] = useState(false);
   const [video, setVideo] = useState();
+  const [number, onChangeNumber] = useState(null);
 
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -119,7 +120,7 @@ export default function App() {
 
     return (
       <View style={styles.screen}>
-      {/* <SafeAreaView style={styles.container}> */}
+      <SafeAreaView style={styles.container}>
         <Video
           style={styles.video}
           source={{uri: video.uri}}
@@ -127,7 +128,14 @@ export default function App() {
           resizeMode='contain'
           isLooping = 'false'
         />
-        {/* </SafeAreaView> */}
+        </SafeAreaView>
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangeNumber}
+        value={number}
+        placeholder="Enter Phone-Number"
+        keyboardType="numeric"
+        />
         <View style={styles.buttonContainer2}>
           <TouchableOpacity style={[{ backgroundColor: '#00B53A'} ,styles.speakerButton]} onPress={() => {playSound2()}}>
           <Image source={require('./assets/speaker.png')} resizeMethod='resize' resizeMode='contain' style={styles.speakerImage}/>
@@ -151,6 +159,9 @@ export default function App() {
           </TouchableOpacity>
           <TouchableOpacity style={[{ backgroundColor: isRecording ? "#DA1E05" : "#207DC1"} ,styles.cameraButton]} onPress={isRecording ? stopRecording : recordVideo}>
           <Image source={require('./assets/camera.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraImage}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={[{ backgroundColor: '#207DC1'} ,styles.speakerButton]} onPress={toggleCameraType}>
+          <Image source={require('./assets/cameraFlip.png')} resizeMethod='resize' resizeMode='contain' style={styles.cameraFlipImage}/>
           </TouchableOpacity>
           
       </View>
@@ -220,5 +231,11 @@ const styles = StyleSheet.create({
   video: {
     flex: 1,
     alignSelf: "stretch"
-  }
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
 });
