@@ -106,10 +106,7 @@ export default function App() {
 
   if (video) {
     let shareVideo = () => {
-      console.log(city);
-      shareAsync(video.uri).then(() => {
-        setVideo(undefined);
-      });
+      alert("Video sent!")
     };
 
     let saveVideo = () => {
