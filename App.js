@@ -41,8 +41,8 @@ export default function App() {
       setLocation(location);
       let city;
         geocode.find( p => {
-          city = p.district
-          setCity(p.district)
+          city = p.region
+          setCity(p.region)
         })
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
       const microphonePermission = await Camera.requestMicrophonePermissionsAsync();
@@ -106,7 +106,8 @@ export default function App() {
 
   if (video) {
     let shareVideo = () => {
-      alert("Video sent!")
+      console.log(city);
+      alert("Video sent!");
     };
 
     let saveVideo = () => {
